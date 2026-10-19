@@ -1,0 +1,20 @@
+# Gustee
+- [x] Build gesture launcher interface, mappings, training, history, and settings.
+- [x] Add companion for landmark capture, custom PyTorch training, and approved desktop launches.
+- [x] Verify navigation, draft editing, disconnected states, mobile layout, download, and pure launch-protection logic.
+- [x] Rename to Gustee across UI, companion, and documentation.
+- [x] Fix download URL and cross-platform setup copy.
+- [x] Add auto-refreshing live camera feed while session is active.
+- [x] Fix background operation: allow_camera, pause_session, and tray start/stop wired correctly.
+- [x] Add MongoDB Atlas integration: gestures, settings, training_runs, launch_history collections.
+- [x] Add 39-app approved launch list grouped by category (browsers, dev tools, office, media, gaming, system).
+- [x] Add gesture toggle: show gesture opens app, show again closes it.
+- [x] Add cursor/keyboard control: 16 action types (move, click, scroll, drag, volume, media, screenshot, zoom).
+- [x] Add action mapping type in UI: Launch App vs Cursor/Keys toggle in MappingDialog.
+- [x] Fix previewing state: camera preview mode works before model is trained.
+- [x] Rebuild downloadable ZIP with all current files (control.py, db.py, updated app.py/core.py).
+- [x] Cross-platform companion: Windows, macOS, Linux background tray with explicit camera consent.
+- [ ] Left-hand gesture support for cursor control (thumb detection is currently right-hand only).
+- [ ] Smooth cursor_move with velocity-based acceleration (currently linear smoothing only).
+- [ ] Custom hotkey action type (user defines any keyboard shortcut).
+- [ ] Gesture sensitivity calibration per-gesture (not just global confidence threshold).
