@@ -41,7 +41,12 @@ DATA.mkdir(parents=True, exist_ok=True)
 KEY = secrets.token_urlsafe(32)
 lock = threading.RLock()
 allowed_origin = os.environ.get("GUSTEE_ORIGIN", "")
-origins = ["http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:8765"]
+origins = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:8765",
+    "https://gestiee.vercel.app",
+]
 if allowed_origin:
     origins.append(allowed_origin)
 
@@ -693,7 +698,8 @@ def main():
     from desktop import Desktop
 
     # ── Load .env file if present (avoids shell %/& escaping issues) ──────────
-    env_path = Path(__file__).parent / ".env"
+    app_dir = Path(sys.executable).parent if getattr(sys, "frozen", False) else Path(__file__).parent
+    env_path = app_dir / ".env"
     if env_path.exists():
         for line in env_path.read_text(encoding="utf-8").splitlines():
             line = line.strip()

@@ -4,7 +4,7 @@ title Gustee Setup
 
 echo.
 echo =============================================
-echo  Gustee - Starting everything
+echo  Gustee Companion
 echo =============================================
 echo.
 
@@ -50,21 +50,6 @@ if errorlevel 1 ( echo ERROR: pip install failed. & pause & exit /b 1 )
 echo Python dependencies ready.
 
 echo.
-echo [4/5] Checking Node.js...
-cd /d "%~dp0.."
-node --version 2>nul 1>nul
-if errorlevel 1 ( echo ERROR: Node.js not found. Get it from https://nodejs.org/ & pause & exit /b 1 )
-for /f "tokens=*" %%v in ('node --version 2^>^&1') do echo Node %%v found.
-
-echo.
-echo [5/5] Installing Node dependencies...
-if exist "node_modules" ( echo node_modules already exists, skipping & goto kill_old )
-echo Running npm install, please wait...
-npm install
-if errorlevel 1 ( echo ERROR: npm install failed. & pause & exit /b 1 )
-
-:kill_old
-echo.
 echo Stopping any previous Gustee companion on port 8765...
 cd /d "%~dp0"
 for /f "tokens=5" %%p in ('netstat -ano 2^>nul ^| findstr ":8765 "') do (
@@ -81,9 +66,8 @@ echo  Launching Gustee...
 echo =============================================
 echo.
 
-echo Starting Gustee companion...
-echo NOTE: A small Gustee console window will appear - this is normal.
-echo       Look for the Gustee tray icon after it starts.
+echo Starting Gustee companion. The hosted Gustee website stays online.
+echo Look for the Gustee tray icon after it starts.
 cd /d "%~dp0"
 
 :: Use python.exe (not pythonw.exe) in a minimized window so errors are visible
@@ -107,27 +91,17 @@ if errorlevel 1 (
     echo  Companion is running on port 8765.
 )
 
-echo Starting web server on http://localhost:8080 ...
-cd /d "%~dp0.."
-start "Gustee Web" cmd /k "npm run dev"
-
-timeout /t 5 /nobreak >nul
-echo Opening browser...
-start "" "http://localhost:8080"
-
 echo.
 echo =============================================
-echo  Gustee is running!
+echo  Gustee Companion is running!
 echo.
-echo  Web UI:    http://localhost:8080
-echo  Database:  gustee (MongoDB Atlas)
 echo  Companion: look for tray icon in taskbar
 echo             (bottom-right, click ^ arrow)
 echo.
 echo  NEXT STEPS:
 echo  1. Find the Gustee tray icon (bottom-right)
 echo  2. Click it and choose "Show pairing key"
-echo  3. In the web UI click "Connect device"
+echo  3. In the Gustee website click "Connect device"
 echo     and paste the pairing key
 echo  4. Click "Allow camera access" in tray
 echo.
@@ -136,4 +110,3 @@ echo  check the minimized Gustee Companion window
 echo  for error messages.
 echo =============================================
 echo.
-pause

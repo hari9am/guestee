@@ -1,0 +1,58 @@
+name: Build Windows companion installer
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install companion dependencies
+        run: python -m pip install --upgrade pip; python -m pip install -r Companion/requirements.txt pyinstaller
+
+      - name: Test companion core
+        working-directory: Companion
+        run: python -m unittest test_core -v
+
+      - name: Bundle companion runtime
+        working-directory: Companion
+        run: >-
+          pyinstaller --noconfirm --clean --onedir --windowed --name Gustee
+          --collect-all torch --collect-all mediapipe --collect-all cv2
+          --collect-all pystray --collect-all PIL --hidden-import tkinter
+          --hidden-import pystray._win32 app.py
+
+      - name: Install Inno Setup
+        run: choco install innosetup --yes --no-progress
+
+      - name: Build setup file
+        shell: pwsh
+        working-directory: Companion
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $version = $env:RELEASE_TAG.TrimStart('v')
+          $compiler = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+          if (-not (Test-Path $compiler)) { $compiler = (Get-Command ISCC.exe).Source }
+          & $compiler "/DAppVersion=$version" installer.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Publish installer
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Companion/dist/installer/Gustee-Setup.exe
+          generate_release_notes: true
+          make_latest: true

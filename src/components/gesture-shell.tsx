@@ -131,17 +131,20 @@ export function GestureShell({ view, children }: { view: View; children: React.R
               Once paired, Gustee reconnects automatically on every page refresh.
             </p>
             <div className="notice">
-              <strong className="text-foreground">Windows:</strong> Double-click <strong className="text-foreground">start.bat</strong>.<br />
+              <strong className="text-foreground">Windows:</strong> Install Gustee, then open it from the Start menu.<br />
               <strong className="text-foreground">macOS:</strong> Run <strong className="text-foreground">bash setup.sh</strong> then <strong className="text-foreground">bash start.sh</strong>.<br />
               <strong className="text-foreground">Linux:</strong> Run <strong className="text-foreground">bash setup.sh</strong> then <strong className="text-foreground">bash start.sh</strong>.<br /><br />
               Copy the pairing key shown in the companion window.
             </div>
             <Button asChild variant="outline" className="mt-4 w-full">
-              <a href="/download/GestureFlow-companion.zip" download>
-                <ArrowDownToLine />Download Gustee companion
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
+                <ArrowDownToLine />Download Windows setup
               </a>
             </Button>
-            <form onSubmit={async (e) => { e.preventDefault(); await connect(tokenInput.trim()); if (!error) setPairing(false); }}>
+            <a className="text-muted-foreground text-xs mt-3 inline-block" href="/download/GestureFlow-companion.zip" download>
+              macOS/Linux source package
+            </a>
+            <form onSubmit={async (e) => { e.preventDefault(); if (await connect(tokenInput.trim())) setPairing(false); }}>
               <label className="field">
                 <span>Pairing key</span>
                 <input type="password" value={tokenInput}

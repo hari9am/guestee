@@ -76,8 +76,8 @@ class Desktop:
 
         btn_frame = tk.Frame(window, pady=10)
         btn_frame.pack()
-        tk.Button(btn_frame, text="Open web UI  (http://localhost:8080)",
-                  command=lambda: (window.destroy(), __import__("webbrowser").open("http://localhost:8080")),
+        tk.Button(btn_frame, text="Open Gustee website",
+                  command=lambda: (window.destroy(), __import__("webbrowser").open("https://gestiee.vercel.app")),
                   bg="#1a5c28", fg="white", padx=10, pady=4).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Continue in background",
                   command=window.destroy, padx=10, pady=4).pack(side="left", padx=5)

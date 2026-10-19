@@ -49,7 +49,18 @@ function useGestureState() {
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
         signal: AbortSignal.timeout(12000),
       });
-      const data = await response.json();
+      let data: Record<string, unknown> = {};
+      try {
+        data = await response.json();
+      } catch {
+        if (!response.ok) {
+          throw new Error(
+            response.status === 403
+              ? "This website is not allowed to connect to the companion. Update or reinstall Gustee companion."
+              : "The companion returned an unexpected response.",
+          );
+        }
+      }
       if (!response.ok)
         throw new Error(
           typeof data.detail === "string"
@@ -79,12 +90,14 @@ function useGestureState() {
       storeToken(value);        // persist so next refresh auto-connects
       sync(data);
       setConnected(true);
+      return true;
     } catch (e) {
       setError(
         e instanceof TypeError
           ? "Companion not reachable. Make sure it is running and allow local network access."
           : e instanceof Error ? e.message : "Connection failed.",
       );
+      return false;
     } finally {
       setBusy(false);
     }

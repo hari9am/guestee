@@ -1141,9 +1141,9 @@ export function GestureWorkspace({ view }: { view: View }) {
             approved applications can be launched.
           </div>
           <Button asChild variant="link" className="mt-3">
-            <a href="/download/GestureFlow-companion.zip" download>
+            <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
               <ArrowDownToLine />
-              Download Gustee companion
+              Download Windows setup
             </a>
           </Button>
         </section>
