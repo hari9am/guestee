@@ -1,4 +1,4 @@
-name: Build Windows companion installer
+name: Build companion installers
 
 on:
   push:
@@ -21,7 +21,9 @@ jobs:
           python-version: "3.11"
 
       - name: Install companion dependencies
-        run: python -m pip install --upgrade pip; python -m pip install -r Companion/requirements.txt pyinstaller
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r Companion/requirements.txt pyinstaller
 
       - name: Test companion core
         working-directory: Companion
@@ -33,7 +35,8 @@ jobs:
           pyinstaller --noconfirm --clean --onedir --windowed --name Gustee
           --collect-all torch --collect-all mediapipe --collect-all cv2
           --collect-all pystray --collect-all PIL --hidden-import tkinter
-          --hidden-import pystray._win32 app.py
+          --hidden-import pystray._win32 --icon gustee-icon.ico
+          --add-data "gustee-icon.png;." app.py
 
       - name: Install Inno Setup
         run: choco install innosetup --yes --no-progress
@@ -50,9 +53,109 @@ jobs:
           & $compiler "/DAppVersion=$version" installer.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Publish installer
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gustee-windows
+          path: Companion/dist/installer/Gustee-Setup.exe
+
+  macos-installer:
+    runs-on: macos-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install companion dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r Companion/requirements.txt pyinstaller
+
+      - name: Test companion core
+        working-directory: Companion
+        run: python -m unittest test_core -v
+
+      - name: Bundle companion runtime
+        working-directory: Companion
+        run: >-
+          pyinstaller --noconfirm --clean --onedir --name Gustee
+          --collect-all torch --collect-all mediapipe --collect-all cv2
+          --collect-all pystray --collect-all PIL --hidden-import tkinter
+          --hidden-import pystray._darwin --add-data "gustee-icon.png:." app.py
+
+      - name: Package macOS bundle
+        working-directory: Companion
+        run: |
+          mkdir -p dist
+          ditto -c -k --sequesterRsrc --keepParent "dist/Gustee" "dist/Gustee-macOS.zip" || true
+          cp install-macos.command dist/
+          zip -j "dist/Gustee-macOS.zip" install-macos.command
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gustee-macos
+          path: Companion/dist/Gustee-macOS.zip
+
+  linux-installer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install companion dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r Companion/requirements.txt pyinstaller
+
+      - name: Test companion core
+        working-directory: Companion
+        run: python -m unittest test_core -v
+
+      - name: Bundle companion runtime
+        working-directory: Companion
+        run: >-
+          pyinstaller --noconfirm --clean --onedir --name Gustee
+          --collect-all torch --collect-all mediapipe --collect-all cv2
+          --collect-all pystray --collect-all PIL --hidden-import tkinter
+          --hidden-import pystray._gtk --add-data "gustee-icon.png:." app.py
+
+      - name: Package Linux bundle
+        working-directory: Companion
+        run: |
+          mkdir -p dist
+          tar -czf "dist/Gustee-Linux-x64.tar.gz" Gustee install-linux.sh gustee-icon.png
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gustee-linux
+          path: Companion/dist/Gustee-Linux-x64.tar.gz
+
+  publish-release:
+    needs: [windows-installer, macos-installer, linux-installer]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Publish release files
         uses: softprops/action-gh-release@v2
         with:
-          files: Companion/dist/installer/Gustee-Setup.exe
+          files: |
+            release-artifacts/gustee-windows/Gustee-Setup.exe
+            release-artifacts/gustee-macos/Gustee-macOS.zip
+            release-artifacts/gustee-linux/Gustee-Linux-x64.tar.gz
           generate_release_notes: true
           make_latest: true

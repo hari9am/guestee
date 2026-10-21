@@ -7,6 +7,9 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  nitro: {
+    preset: "netlify",
+  },
   vite: {
     optimizeDeps: {
       // Discover the shared UI dependencies before serving the first page.

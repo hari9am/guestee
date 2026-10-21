@@ -7,6 +7,7 @@ AppId={{A9357282-A454-4F0D-971F-50163F559FC9}
 AppName=Gustee Companion
 AppVersion={#AppVersion}
 AppPublisher=Gustee
+SetupIconFile=gustee-icon.ico
 DefaultDirName={localappdata}\Programs\Gustee
 DefaultGroupName=Gustee Companion
 DisableProgramGroupPage=yes

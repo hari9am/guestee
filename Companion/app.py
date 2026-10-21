@@ -45,7 +45,7 @@ origins = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
     "http://localhost:8765",
-    "https://gestiee.vercel.app",
+    "https://gestuee.netlify.app",
 ]
 if allowed_origin:
     origins.append(allowed_origin)
@@ -54,7 +54,7 @@ app = FastAPI(docs_url=None, redoc_url=None)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"https://[a-zA-Z0-9.-]+\.lovable\.app",
+    allow_origin_regex=r"https://[a-zA-Z0-9.-]+\.netlify\.app",
     allow_methods=["GET", "POST"],
     allow_headers=["Authorization", "Content-Type"],
 )
@@ -69,6 +69,7 @@ class Mapping(BaseModel):
     app: str = Field(default="")          # used when type="launch"
     target: str = ""                       # used when type="launch" + website
     action: str = Field(default="")       # used when type="action"
+    builtin: str = Field(default="")
     enabled: bool = True
     samples: int = Field(default=0, ge=0)
 
@@ -84,15 +85,15 @@ class GestureId(BaseModel):
 # ── In-memory state ────────────────────────────────────────────────────────────
 
 default_mappings = [
-    dict(id="G01", name="Peace sign",    symbol="✌️", type="launch", app="YouTube", target="https://www.youtube.com", action="", enabled=True, samples=0),
-    dict(id="G02", name="Closed fist",   symbol="✊", type="launch", app="VS Code",  target="",                       action="", enabled=True, samples=0),
-    dict(id="G03", name="Thumbs up",     symbol="👍", type="launch", app="Spotify",  target="",                       action="", enabled=True, samples=0),
-    dict(id="G04", name="Three fingers", symbol="🤟", type="launch", app="Chrome",   target="",                       action="", enabled=True, samples=0),
+    dict(id="G01", name="Peace sign",  symbol="✌️", type="launch", app="YouTube", target="https://www.youtube.com", action="", builtin="Victory", enabled=True, samples=0),
+    dict(id="G02", name="Closed fist", symbol="✊", type="launch", app="VS Code",  target="",                       action="", builtin="Closed_Fist", enabled=True, samples=0),
+    dict(id="G03", name="Thumbs up",   symbol="👍", type="launch", app="Spotify",  target="",                       action="", builtin="Thumb_Up", enabled=True, samples=0),
+    dict(id="G04", name="Pointing up", symbol="☝️", type="launch", app="Chrome",  target="",                       action="", builtin="Pointing_Up", enabled=True, samples=0),
 ]
 
 state = dict(
     listening=False, camera=False, camera_permission=False,
-    gesture=None, confidence=0, model=False, accuracy=None,
+    gesture=None, confidence=0, model=True, accuracy=None,
     mappings=default_mappings, history=[], settings=Settings().model_dump(),
     recording=None, training=False, previewing=False, error=None,
 )
@@ -146,6 +147,11 @@ def restore():
             config = json.loads(_json_fallback_path().read_text(encoding="utf-8"))
             state["mappings"] = [Mapping(**m).model_dump() for m in config["mappings"]]
 
+        builtin_by_id = {mapping["id"]: mapping["builtin"] for mapping in default_mappings}
+        for mapping in state["mappings"]:
+            if not mapping["builtin"]:
+                mapping["builtin"] = builtin_by_id.get(mapping["id"], "")
+
         if db_settings:
             state["settings"] = Settings(**db_settings).model_dump()
         elif _json_fallback_path().exists():
@@ -170,7 +176,8 @@ def restore():
         # ── Load PyTorch model ────────────────────────────────────────────────
         if (DATA / "model.pt").exists():
             saved = torch.load(DATA / "model.pt", map_location="cpu", weights_only=True)
-            if saved["classes"] == [m["id"] for m in state["mappings"]]:
+            trained_ids = [m["id"] for m in state["mappings"] if len(samples.get(m["id"], [])) >= 30]
+            if saved["classes"] == trained_ids:
                 classes = saved["classes"]
                 classifier = network(len(classes))
                 classifier.load_state_dict(saved["weights"])
@@ -192,7 +199,7 @@ def network(n):
 def invalidate():
     global classifier
     classifier = None
-    state.update(model=False, accuracy=None, listening=False)
+    state.update(model=True, accuracy=None, listening=False)
     (DATA / "model.pt").unlink(missing_ok=True)
 
 # ── Auth middleware ────────────────────────────────────────────────────────────
@@ -203,7 +210,7 @@ async def auth(request: Request, call_next):
     valid_origin = (
         origin is None
         or origin in origins
-        or bool(re.fullmatch(r"https://[a-zA-Z0-9.-]+\.lovable\.app", origin))
+        or bool(re.fullmatch(r"https://[a-zA-Z0-9.-]+\.netlify\.app", origin))
     )
     if not valid_origin:
         return Response("Origin not allowed", status_code=403)
@@ -267,7 +274,7 @@ def _start_recognition():
         if not state["camera_permission"]:
             raise ValueError("Allow camera access from the Gustee tray menu first.")
         if not state["model"]:
-            raise ValueError("Record your gestures and train your model before starting a session.")
+            raise ValueError("No gesture recognizer is available. Reinstall Gustee to restore the built-in gesture model.")
         if state["recording"] or state["training"]:
             raise ValueError("Finish recording or training first.")
         state.update(listening=True, error=None)
@@ -279,7 +286,7 @@ def start():
         if not state["camera_permission"]:
             raise HTTPException(403, "Allow camera access from the Gustee tray menu first.")
         if not state["model"]:
-            raise HTTPException(409, "Record your gestures and train your model before starting a session.")
+            raise HTTPException(409, "No gesture recognizer is available. Reinstall Gustee to restore the built-in gesture model.")
         if state["recording"] or state["training"]:
             raise HTTPException(409, "Finish recording or training first.")
         state.update(listening=True, error=None)
@@ -340,6 +347,8 @@ def save_mapping(mapping: Mapping):
         entry = mapping.model_dump()
         entry["samples"] = len(samples.get(mapping.id, []))
         if old:
+            if not entry["builtin"]:
+                entry["builtin"] = old.get("builtin", "")
             old.update(entry)
         else:
             state["mappings"].append(entry)
@@ -542,13 +551,18 @@ def camera_loop():
     global worker_running, frame_jpeg
     capture = None
     try:
-        model_path = DATA / "hand_landmarker.task"
+        model_path = DATA / "gesture_recognizer.task"
         if not model_path.exists():
-            urlretrieve(
-                "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
-                model_path,
-            )
-        options = mp.tasks.vision.HandLandmarkerOptions(
+            bundled_model = Path(getattr(sys, "_MEIPASS", Path(__file__).parent)) / "gesture_recognizer.task"
+            if bundled_model.exists():
+                import shutil
+                shutil.copy2(bundled_model, model_path)
+            else:
+                urlretrieve(
+                    "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
+                    model_path,
+                )
+        options = mp.tasks.vision.GestureRecognizerOptions(
             base_options=mp.tasks.BaseOptions(model_asset_path=str(model_path)),
             running_mode=mp.tasks.vision.RunningMode.VIDEO,
             num_hands=1,
@@ -570,7 +584,7 @@ def camera_loop():
         gate = LaunchGate()
         last_sample = 0.0
         epoch = time.monotonic()
-        with mp.tasks.vision.HandLandmarker.create_from_options(options) as tracker:
+        with mp.tasks.vision.GestureRecognizer.create_from_options(options) as tracker:
             state["camera"] = True
             while (
                 not shutdown.is_set()
@@ -582,7 +596,7 @@ def camera_loop():
                     raise RuntimeError("Could not read your camera")
                 frame = cv2.flip(frame, 1)
                 now = time.monotonic()
-                result = tracker.detect_for_video(
+                result = tracker.recognize_for_video(
                     mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)),
                     int((now - epoch) * 1000),
                 )
@@ -618,30 +632,33 @@ def camera_loop():
                                     control.process_frame(m["action"], result.hand_landmarks[0])
 
                             # ── Step 2: ML classifier for launch mappings only ──
+                            recognized = None
+                            if result.gestures and result.gestures[0]:
+                                category = result.gestures[0][0]
+                                if category.category_name not in ("None", "Unknown"):
+                                    recognized = (category.category_name, float(category.score), "builtin")
                             if classifier is not None:
                                 with torch.no_grad():
                                     probs = torch.softmax(
                                         classifier(torch.from_numpy(values).unsqueeze(0)), dim=1
                                     )[0]
-                                conf  = float(probs.max().item())
-                                index = int(probs.argmax().item())
-                                gid     = classes[index]
-                                mapping = next((m for m in state["mappings"] if m["id"] == gid), None)
-                                # Only show gesture name / fire launch for launch-type mappings
-                                if mapping and mapping.get("type", "launch") == "launch":
-                                    state.update(gesture=mapping["name"], confidence=conf)
-                                    s = state["settings"]
-                                    if (
-                                        gate.update(
-                                            gid if mapping["enabled"] else None,
-                                            conf, now,
-                                            s["confidence"] / 100, s["hold"], s["cooldown"],
-                                        )
-                                        and mapping
-                                    ):
-                                        launch(mapping, conf)
+                                learned_confidence = float(probs.max().item())
+                                if learned_confidence >= state["settings"]["confidence"] / 100:
+                                    recognized = (classes[int(probs.argmax().item())], learned_confidence, "learned")
+
+                            mapping = None
+                            if recognized:
+                                gesture_id, conf, source = recognized
+                                if source == "learned":
+                                    mapping = next((m for m in state["mappings"] if m["id"] == gesture_id), None)
                                 else:
-                                    state.update(gesture=None, confidence=0)
+                                    mapping = next((m for m in state["mappings"] if m.get("builtin") == gesture_id), None)
+                            if mapping and mapping.get("type", "launch") == "launch":
+                                state.update(gesture=mapping["name"], confidence=conf)
+                                s = state["settings"]
+                                if gate.update(mapping["id"] if mapping["enabled"] else None, conf, now,
+                                               s["confidence"] / 100, s["hold"], s["cooldown"]):
+                                    launch(mapping, conf)
                             else:
                                 state.update(gesture=None, confidence=0)
                     else:
@@ -717,7 +734,15 @@ def main():
     torch.set_num_threads(2)
     restore()
 
-    server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=8765, log_level="warning"))
+    server = uvicorn.Server(
+        uvicorn.Config(
+            app,
+            host="127.0.0.1",
+            port=8765,
+            log_level="warning",
+            log_config=None,
+        )
+    )
     thread = threading.Thread(target=server.run, daemon=True)
     thread.start()
 

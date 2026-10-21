@@ -1138,14 +1138,29 @@ export function GestureWorkspace({ view }: { view: View }) {
           </div>
           <div className="notice">
             Camera frames and training samples never leave your device. Only
-            approved applications can be launched.
+            approved applications can be launched. Open the website only to pair
+            this computer and train custom gestures.
           </div>
-          <Button asChild variant="link" className="mt-3">
-            <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
-              <ArrowDownToLine />
-              Download Windows setup
-            </a>
-          </Button>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            <Button asChild variant="outline" className="w-full">
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
+                <ArrowDownToLine />
+                Windows setup
+              </a>
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-macOS.zip" target="_blank" rel="noreferrer">
+                <ArrowDownToLine />
+                macOS app
+              </a>
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Linux-x64.tar.gz" target="_blank" rel="noreferrer">
+                <ArrowDownToLine />
+                Linux package
+              </a>
+            </Button>
+          </div>
         </section>
       )}
 

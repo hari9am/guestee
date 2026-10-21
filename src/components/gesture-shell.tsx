@@ -131,19 +131,29 @@ export function GestureShell({ view, children }: { view: View; children: React.R
               Once paired, Gustee reconnects automatically on every page refresh.
             </p>
             <div className="notice">
+              <strong className="text-foreground">Install once:</strong> Gustee runs locally in the background and keeps your training data on this computer.<br />
               <strong className="text-foreground">Windows:</strong> Install Gustee, then open it from the Start menu.<br />
-              <strong className="text-foreground">macOS:</strong> Run <strong className="text-foreground">bash setup.sh</strong> then <strong className="text-foreground">bash start.sh</strong>.<br />
-              <strong className="text-foreground">Linux:</strong> Run <strong className="text-foreground">bash setup.sh</strong> then <strong className="text-foreground">bash start.sh</strong>.<br /><br />
-              Copy the pairing key shown in the companion window.
+              <strong className="text-foreground">macOS:</strong> Download the macOS package, then run the installer from the app bundle.<br />
+              <strong className="text-foreground">Linux:</strong> Download the Linux package, extract it, and run the installer script.<br /><br />
+              Use the website only to pair this device and train or manage custom gestures.
             </div>
-            <Button asChild variant="outline" className="mt-4 w-full">
-              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
-                <ArrowDownToLine />Download Windows setup
-              </a>
-            </Button>
-            <a className="text-muted-foreground text-xs mt-3 inline-block" href="/download/GestureFlow-companion.zip" download>
-              macOS/Linux source package
-            </a>
+            <div className="mt-4 grid gap-2">
+              <Button asChild variant="outline" className="w-full">
+                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
+                  <ArrowDownToLine />Download Windows setup
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-macOS.zip" target="_blank" rel="noreferrer">
+                  <ArrowDownToLine />Download macOS companion
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Linux-x64.tar.gz" target="_blank" rel="noreferrer">
+                  <ArrowDownToLine />Download Linux companion
+                </a>
+              </Button>
+            </div>
             <form onSubmit={async (e) => { e.preventDefault(); if (await connect(tokenInput.trim())) setPairing(false); }}>
               <label className="field">
                 <span>Pairing key</span>

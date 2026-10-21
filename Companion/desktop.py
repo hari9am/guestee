@@ -1,8 +1,10 @@
 """Local consent and tray controls. No camera access is performed here."""
 import queue
+import sys
 import threading
 import tkinter as tk
 from tkinter import messagebox
+from pathlib import Path
 
 
 class Desktop:
@@ -16,6 +18,9 @@ class Desktop:
         self.tasks = queue.Queue()
         self.root = tk.Tk()
         self.root.withdraw()
+        self.app_dir = Path(getattr(sys, "_MEIPASS", Path(__file__).parent))
+        if sys.platform == "win32":
+            self.root.iconbitmap(default=str(self.app_dir / "gustee-icon.ico"))
         self.icon = None
         self.exiting = False
 
@@ -76,8 +81,8 @@ class Desktop:
 
         btn_frame = tk.Frame(window, pady=10)
         btn_frame.pack()
-        tk.Button(btn_frame, text="Open Gustee website",
-                  command=lambda: (window.destroy(), __import__("webbrowser").open("https://gestiee.vercel.app")),
+        tk.Button(btn_frame, text="Open Gustee  (gestuee.netlify.app)",
+                  command=lambda: (window.destroy(), __import__("webbrowser").open("https://gestuee.netlify.app")),
                   bg="#1a5c28", fg="white", padx=10, pady=4).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Continue in background",
                   command=window.destroy, padx=10, pady=4).pack(side="left", padx=5)
@@ -125,21 +130,9 @@ class Desktop:
 
     def run(self, allow):
         import pystray
-        from PIL import Image, ImageDraw, ImageFont
+        from PIL import Image
 
-        # Draw a clean "G" icon with brand colors
-        size = 64
-        img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-        draw = ImageDraw.Draw(img)
-
-        # Background circle — dark
-        draw.ellipse((2, 2, size - 2, size - 2), fill=(20, 23, 24))
-        # Outer ring — brand green
-        draw.ellipse((2, 2, size - 2, size - 2), outline=(140, 220, 80), width=4)
-        # "G" letter in the center
-        draw.text((18, 12), "G", fill=(140, 220, 80), font=ImageFont.load_default())
-        # Inner dot
-        draw.ellipse((28, 28, 36, 36), fill=(140, 220, 80))
+        img = Image.open(self.app_dir / "gustee-icon.png").convert("RGBA")
 
         def item(label, callback):
             return pystray.MenuItem(
