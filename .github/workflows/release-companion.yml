@@ -36,7 +36,15 @@ jobs:
           --collect-all torch --collect-all mediapipe --collect-all cv2
           --collect-all pystray --collect-all PIL --hidden-import tkinter
           --hidden-import pystray._win32 --icon gustee-icon.ico
-          --add-data "gustee-icon.png;." app.py
+          --add-data "gustee-icon.png;." --add-data "gustee-icon.ico;." app.py
+
+      - name: Verify packaged Windows icon
+        shell: pwsh
+        working-directory: Companion
+        run: |
+          if (-not (Test-Path "dist/Gustee/_internal/gustee-icon.ico")) {
+            throw "PyInstaller did not include gustee-icon.ico in the runtime bundle."
+          }
 
       - name: Install Inno Setup
         run: choco install innosetup --yes --no-progress
