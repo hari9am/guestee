@@ -133,7 +133,7 @@ jobs:
         working-directory: Companion
         run: |
           mkdir -p dist
-          tar -czf "dist/Gustee-Linux-x64.tar.gz" Gustee install-linux.sh gustee-icon.png
+          tar -czf "dist/Gustee-Linux-x64.tar.gz" dist/Gustee install-linux.sh gustee-icon.png
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
