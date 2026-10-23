@@ -94,12 +94,12 @@ function PrivacyPolicy() {
             <p className="mt-2">
               The website does not need your camera to pair with the desktop
               companion. It sends your chosen gesture settings and training
-              actions to the companion, which saves them locally. The standard
-              downloadable companion does not send your samples, model,
-              settings, or history to a Gustee-operated cloud database. A
-              separately configured companion may use a MongoDB connection
-              supplied by its operator; in that case, the operator controls that
-              database and its data handling.
+              actions to the companion, which saves them locally. The
+              companion stores your samples, model, settings, and history
+              locally by default and does not connect to a cloud database unless
+              an operator explicitly configures a MongoDB connection using the
+              MONGO_URI environment variable. If configured, data may be sent
+              to that database, whose operator controls its handling.
             </p>
             <p className="mt-2">
               The website is hosted by Netlify. Like other website hosts,

@@ -725,11 +725,9 @@ def main():
                 os.environ.setdefault(key.strip(), val.strip())
 
     # Connect to MongoDB
-    mongo_uri = os.environ.get(
-        "MONGO_URI",
-        "mongodb+srv://farmconnect:Cham8497%40@findit.qejydei.mongodb.net/gustee?retryWrites=true&w=majority",
-    )
-    db.connect(mongo_uri, db_name="gustee")
+    mongo_uri = os.environ.get("MONGO_URI", "").strip()
+    if mongo_uri:
+        db.connect(mongo_uri, db_name="gustee")
 
     torch.set_num_threads(2)
     restore()
