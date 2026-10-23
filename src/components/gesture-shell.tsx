@@ -112,7 +112,10 @@ export function GestureShell({ view, children }: { view: View; children: React.R
           {children}
           <footer className="page-footer">
             <span className="flex items-center gap-2"><ShieldCheck size={11} />LOCAL-FIRST. PRIVACY BY DESIGN.</span>
-            <span>MADE FOR A MORE NATURAL WORKFLOW <span className="text-primary">↗</span></span>
+            <span className="flex items-center gap-3">
+              <Link to="/privacy" className="hover:text-foreground">Privacy</Link>
+              <span>MADE FOR A MORE NATURAL WORKFLOW <span className="text-primary">↗</span></span>
+            </span>
           </footer>
         </main>
       </div>

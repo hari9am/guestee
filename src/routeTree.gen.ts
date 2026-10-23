@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GesturesRouteImport } from './routes/gestures'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TrainingRouteImport } from './routes/training'
 
@@ -30,6 +31,11 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/gestures': typeof GesturesRoute
   '/history': typeof HistoryRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/training': typeof TrainingRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gestures': typeof GesturesRoute
   '/history': typeof HistoryRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/training': typeof TrainingRoute
 }
@@ -60,21 +68,31 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/gestures': typeof GesturesRoute
   '/history': typeof HistoryRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/training': typeof TrainingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/gestures' | '/history' | '/settings' | '/training'
+  fullPaths:
+    '/' | '/gestures' | '/history' | '/privacy' | '/settings' | '/training'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/gestures' | '/history' | '/settings' | '/training'
-  id: '__root__' | '/' | '/gestures' | '/history' | '/settings' | '/training'
+  to: '/' | '/gestures' | '/history' | '/privacy' | '/settings' | '/training'
+  id:
+    | '__root__'
+    | '/'
+    | '/gestures'
+    | '/history'
+    | '/privacy'
+    | '/settings'
+    | '/training'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GesturesRoute: typeof GesturesRoute
   HistoryRoute: typeof HistoryRoute
+  PrivacyRoute: typeof PrivacyRoute
   SettingsRoute: typeof SettingsRoute
   TrainingRoute: typeof TrainingRoute
 }
@@ -102,6 +120,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -123,6 +148,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GesturesRoute: GesturesRoute,
   HistoryRoute: HistoryRoute,
+  PrivacyRoute: PrivacyRoute,
   SettingsRoute: SettingsRoute,
   TrainingRoute: TrainingRoute,
 }
