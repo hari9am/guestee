@@ -8,7 +8,7 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-## GestureFlow architecture
+## Gestuee architecture
 - Keep the web interface in TanStack routes with a shared workspace provider; navigation must preserve the active companion connection.
 - Run camera capture, PyTorch training, data persistence, and desktop launches in the downloadable cross-platform companion, not the hosted web runtime; operating-system access requires a local process.
 - Bind the companion to loopback, require an ephemeral pairing key, validate browser origins, and launch only hardcoded approved applications with shell disabled; websites must be HTTPS.

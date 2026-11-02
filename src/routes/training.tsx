@@ -3,13 +3,13 @@ import { GestureWorkspace } from "@/components/gesture-workspace";
 export const Route = createFileRoute("/training")({
   head: () => ({
     meta: [
-      { title: "Train your model — Gustee" },
+      { title: "Train your model — Gestuee" },
       {
         name: "description",
         content:
           "Record hand gesture samples and train your local custom PyTorch classifier.",
       },
-      { property: "og:title", content: "Train your model — Gustee" },
+      { property: "og:title", content: "Train your model — Gestuee" },
       {
         property: "og:description",
         content:

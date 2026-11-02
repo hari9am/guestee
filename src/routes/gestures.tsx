@@ -3,12 +3,12 @@ import { GestureWorkspace } from "@/components/gesture-workspace";
 export const Route = createFileRoute("/gestures")({
   head: () => ({
     meta: [
-      { title: "My gestures — Gustee" },
+      { title: "My gestures — Gestuee" },
       {
         name: "description",
         content: "Assign your own hand gestures to your favorite applications.",
       },
-      { property: "og:title", content: "My gestures — Gustee" },
+      { property: "og:title", content: "My gestures — Gestuee" },
       {
         property: "og:description",
         content: "Create and manage your custom gesture mappings.",

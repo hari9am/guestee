@@ -3,13 +3,13 @@ import { GestureWorkspace } from "@/components/gesture-workspace";
 export const Route = createFileRoute("/history")({
   head: () => ({
     meta: [
-      { title: "Launch history — Gustee" },
+      { title: "Launch history — Gestuee" },
       {
         name: "description",
         content:
           "Review and export your gesture-triggered application launch history.",
       },
-      { property: "og:title", content: "Launch history — Gustee" },
+      { property: "og:title", content: "Launch history — Gestuee" },
       {
         property: "og:description",
         content: "Every gesture and application launch in one place.",

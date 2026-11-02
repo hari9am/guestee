@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="title description">
+  <title id="title">Gestuee system design</title>
+  <desc id="description">Architecture diagram showing the hosted TanStack web workspace communicating through a one-time pairing key with a loopback-only desktop companion. Inside the companion, camera frames pass through MediaPipe landmark detection, gesture recognition, a confidence and hold gate, and approved app or desktop actions. Training and persistence remain on the companion, with optional MongoDB metadata storage.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171a19"/>
+      <stop offset="1" stop-color="#111313"/>
+    </linearGradient>
+    <linearGradient id="title-bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#293322"/>
+      <stop offset="1" stop-color="#20291c"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M1 1 8 5 1 9" fill="none" stroke="#b3f33a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M1 1 8 5 1 9" fill="none" stroke="#84907d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"/>
+    </marker>
+    <style>
+      text { font-family: Manrope, "Segoe UI", Arial, sans-serif; }
+      .muted { fill: #a7ada5; }
+      .bright { fill: #f0f3ed; }
+      .lime { fill: #b3f33a; }
+      .card { fill: #1d211f; stroke: #343a34; stroke-width: 1.5; }
+      .subcard { fill: #202622; stroke: #394334; stroke-width: 1.3; }
+      .icon-stroke { fill: none; stroke: #b3f33a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; }
+      .small-stroke { fill: none; stroke: #a7ada5; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1050" rx="24" fill="url(#background)"/>
+
+  <rect x="470" y="34" width="660" height="94" rx="17" fill="url(#title-bg)" stroke="#607443" stroke-width="1.5"/>
+  <circle cx="520" cy="81" r="23" fill="#b3f33a"/>
+  <path d="M510 83a10 10 0 0 1 20 0m-24-6a14 14 0 0 1 28 0m-32-6a18 18 0 0 1 36 0m-18 17v7" fill="none" stroke="#182015" stroke-linecap="round" stroke-width="2.8"/>
+  <circle cx="532" cy="60" r="3" fill="#182015"/>
+  <text x="825" y="76" text-anchor="middle" class="bright" font-size="29" font-weight="750">Gestuee System Design</text>
+  <text x="825" y="105" text-anchor="middle" class="muted" font-size="15">Secure browser-to-desktop architecture · local-first gesture recognition</text>
+
+  <!-- Browser application boundary -->
+  <rect x="42" y="172" width="304" height="455" rx="17" fill="#1b2020" stroke="#65734a" stroke-width="1.6"/>
+  <rect x="42" y="172" width="304" height="48" rx="17" fill="#273022"/>
+  <path d="M42 203v17h304v-17" fill="#273022"/>
+  <text x="66" y="202" class="lime" font-size="12" font-weight="750" letter-spacing="1.5">BROWSER · WEB WORKSPACE</text>
+  <rect class="card" x="66" y="244" width="256" height="124" rx="11"/>
+  <rect x="86" y="265" width="49" height="39" rx="5" class="small-stroke"/>
+  <path d="M93 273h35m-35 7h25m-25 7h30m-21 17v8m-8 0h24" class="small-stroke"/>
+  <text x="151" y="274" class="bright" font-size="15" font-weight="700">TanStack Start + React</text>
+  <text x="151" y="298" class="muted" font-size="12.5">Routes · shared workspace provider</text>
+  <text x="86" y="343" class="muted" font-size="12">Configure mappings, settings, training and history</text>
+
+  <rect class="subcard" x="66" y="387" width="256" height="93" rx="11"/>
+  <circle cx="96" cy="421" r="16" fill="#283221"/>
+  <path d="M88 421h16m-8-8v16" class="icon-stroke" stroke-width="2"/>
+  <text x="122" y="418" class="bright" font-size="14" font-weight="700">Pairing credential</text>
+  <text x="122" y="441" class="muted" font-size="12.5">One-time key · sessionStorage</text>
+  <text x="86" y="465" class="muted" font-size="11.5">Re-pair after companion restart</text>
+
+  <rect class="subcard" x="66" y="499" width="256" height="103" rx="11"/>
+  <path d="M90 525h27v34H90zm6 8h15m-15 7h15m-15 7h11" class="small-stroke"/>
+  <text x="132" y="527" class="bright" font-size="14" font-weight="700">REST requests + status polling</text>
+  <text x="132" y="550" class="muted" font-size="12.5">Pair, configure, record, train, start/stop</text>
+  <text x="86" y="582" class="muted" font-size="11.5">Hosted UI never accesses the OS camera</text>
+
+  <!-- Loopback connection -->
+  <path d="M346 390h90" fill="none" stroke="#b3f33a" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="350" y="329" width="82" height="49" rx="8" fill="#202820" stroke="#48563a"/>
+  <text x="391" y="349" text-anchor="middle" class="lime" font-size="11" font-weight="700">HTTP</text>
+  <text x="391" y="367" text-anchor="middle" class="muted" font-size="10">loopback only</text>
+  <text x="391" y="406" text-anchor="middle" class="muted" font-size="10.5">127.0.0.1:8765</text>
+
+  <!-- Local companion trust boundary -->
+  <rect x="452" y="158" width="1104" height="654" rx="20" fill="#151a16" stroke="#718a4b" stroke-width="2" stroke-dasharray="9 6"/>
+  <rect x="480" y="143" width="484" height="31" rx="8" fill="#20291c"/>
+  <text x="498" y="164" class="lime" font-size="13" font-weight="750" letter-spacing="1">LOCAL DESKTOP COMPANION · DEVICE TRUST BOUNDARY</text>
+  <text x="1528" y="164" text-anchor="end" class="muted" font-size="11.5">Camera, model, persistence and OS access stay on this computer</text>
+
+  <!-- API and security -->
+  <rect class="card" x="480" y="208" width="198" height="202" rx="13"/>
+  <rect x="480" y="208" width="198" height="5" rx="2.5" fill="#b3f33a"/>
+  <circle cx="507" cy="242" r="14" fill="#b3f33a"/>
+  <text x="507" y="247" text-anchor="middle" fill="#182015" font-size="12" font-weight="800">1</text>
+  <text x="531" y="247" class="bright" font-size="15" font-weight="700">FastAPI service</text>
+  <path d="M539 274h80v42h-80z" class="small-stroke"/>
+  <path d="M552 288h54m-54 9h43m-43 9h48" class="icon-stroke" stroke-width="2"/>
+  <text x="579" y="340" text-anchor="middle" class="muted" font-size="12">Auth + origin validation</text>
+  <text x="579" y="361" text-anchor="middle" class="muted" font-size="11.5">Allowlisted browser origins</text>
+  <text x="579" y="386" text-anchor="middle" class="lime" font-size="10.5" font-weight="700">EPHEMERAL PAIRING KEY</text>
+
+  <!-- Desktop controls -->
+  <rect class="card" x="704" y="208" width="170" height="202" rx="13"/>
+  <rect x="704" y="208" width="170" height="5" rx="2.5" fill="#829c58"/>
+  <circle cx="731" cy="242" r="14" fill="#b3f33a"/>
+  <text x="731" y="247" text-anchor="middle" fill="#182015" font-size="12" font-weight="800">2</text>
+  <text x="755" y="247" class="bright" font-size="14" font-weight="700">Session manager</text>
+  <path d="M760 276v21m-10-10h20m-10 10v12m-15 0h30" class="icon-stroke"/>
+  <rect x="744" y="318" width="32" height="24" rx="4" class="small-stroke"/>
+  <path d="M750 326h20m-20 7h13" class="small-stroke"/>
+  <text x="789" y="324" class="muted" font-size="11.5">Tray controls</text>
+  <text x="789" y="342" class="muted" font-size="11.5">Consent + status</text>
+  <text x="789" y="372" class="muted" font-size="11">Main thread</text>
+  <text x="789" y="389" class="lime" font-size="10.5" font-weight="700">CONSENT REQUIRED</text>
+
+  <!-- Camera and landmark pipeline -->
+  <rect class="card" x="900" y="208" width="180" height="202" rx="13"/>
+  <rect x="900" y="208" width="180" height="5" rx="2.5" fill="#829c58"/>
+  <circle cx="927" cy="242" r="14" fill="#b3f33a"/>
+  <text x="927" y="247" text-anchor="middle" fill="#182015" font-size="12" font-weight="800">3</text>
+  <text x="951" y="247" class="bright" font-size="14" font-weight="700">Camera worker</text>
+  <rect x="961" y="269" width="54" height="39" rx="6" class="small-stroke"/>
+  <circle cx="988" cy="288.5" r="10" class="icon-stroke"/>
+  <path d="m973 269 6-7h18l6 7" class="small-stroke"/>
+  <text x="990" y="332" text-anchor="middle" class="muted" font-size="12">OpenCV capture</text>
+  <text x="990" y="352" text-anchor="middle" class="muted" font-size="11.5">MediaPipe Hands</text>
+  <text x="990" y="378" text-anchor="middle" class="lime" font-size="10.5" font-weight="700">21 LANDMARKS · 63 VALUES</text>
+  <text x="990" y="395" text-anchor="middle" class="muted" font-size="10.5">Background worker</text>
+
+  <!-- Gesture recognition -->
+  <rect class="card" x="1106" y="208" width="180" height="202" rx="13"/>
+  <rect x="1106" y="208" width="180" height="5" rx="2.5" fill="#829c58"/>
+  <circle cx="1133" cy="242" r="14" fill="#b3f33a"/>
+  <text x="1133" y="247" text-anchor="middle" fill="#182015" font-size="12" font-weight="800">4</text>
+  <text x="1157" y="247" class="bright" font-size="14" font-weight="700">Gesture engine</text>
+  <g class="icon-stroke" stroke-width="2.4">
+    <circle cx="1143" cy="282" r="4"/><circle cx="1143" cy="301" r="4"/><circle cx="1143" cy="320" r="4"/>
+    <circle cx="1176" cy="291" r="4"/><circle cx="1176" cy="311" r="4"/><circle cx="1209" cy="301" r="4"/>
+    <path d="m1147 282 25 8m-25 11h25m-25 8 25-8m8 0 25 9m-25-9 25-9"/>
+  </g>
+  <text x="1196" y="345" text-anchor="middle" class="muted" font-size="11.5">Built-in recognizer</text>
+  <text x="1196" y="363" text-anchor="middle" class="muted" font-size="11.5">+ custom PyTorch model</text>
+  <text x="1196" y="389" text-anchor="middle" class="lime" font-size="10.5" font-weight="700">LOCAL INFERENCE</text>
+
+  <!-- Trigger and dispatch -->
+  <rect class="card" x="1312" y="208" width="216" height="202" rx="13"/>
+  <rect x="1312" y="208" width="216" height="5" rx="2.5" fill="#829c58"/>
+  <circle cx="1339" cy="242" r="14" fill="#b3f33a"/>
+  <text x="1339" y="247" text-anchor="middle" fill="#182015" font-size="12" font-weight="800">5</text>
+  <text x="1363" y="247" class="bright" font-size="14" font-weight="700">Trigger + dispatch</text>
+  <path d="M1382 270h72m-72 23h72m-72 23h72" class="small-stroke"/>
+  <circle cx="1401" cy="270" r="6" fill="#1d211f" stroke="#b3f33a" stroke-width="2.5"/>
+  <circle cx="1434" cy="293" r="6" fill="#1d211f" stroke="#b3f33a" stroke-width="2.5"/>
+  <circle cx="1418" cy="316" r="6" fill="#1d211f" stroke="#b3f33a" stroke-width="2.5"/>
+  <text x="1420" y="347" text-anchor="middle" class="muted" font-size="11.5">Confidence · hold · cooldown</text>
+  <text x="1420" y="367" text-anchor="middle" class="muted" font-size="11.5">Gesture mapping → target</text>
+  <text x="1420" y="391" text-anchor="middle" class="lime" font-size="10.5" font-weight="700">ALLOWLISTED ACTIONS ONLY</text>
+
+  <!-- Runtime pipeline arrows -->
+  <g fill="none" stroke="#b3f33a" stroke-width="2.3" marker-end="url(#arrow)">
+    <path d="M680 310h18"/><path d="M876 310h18"/><path d="M1082 310h18"/><path d="M1288 310h18"/>
+  </g>
+  <text x="690" y="290" text-anchor="middle" class="muted" font-size="9.5">start / stop</text>
+  <text x="886" y="290" text-anchor="middle" class="muted" font-size="9.5">consented</text>
+  <text x="1092" y="290" text-anchor="middle" class="muted" font-size="9.5">landmarks</text>
+  <text x="1298" y="290" text-anchor="middle" class="muted" font-size="9.5">class + score</text>
+
+  <!-- Allowed targets -->
+  <rect class="subcard" x="1312" y="436" width="216" height="138" rx="12"/>
+  <text x="1332" y="463" class="lime" font-size="11" font-weight="750" letter-spacing="1">LOCAL OUTPUTS</text>
+  <text x="1332" y="490" class="bright" font-size="12.5">Approved applications</text>
+  <text x="1332" y="512" class="bright" font-size="12.5">HTTPS websites</text>
+  <text x="1332" y="534" class="bright" font-size="12.5">Configured desktop controls</text>
+  <text x="1332" y="558" class="muted" font-size="10.5">Fixed commands · shell=False</text>
+  <path d="M1420 411v18" fill="none" stroke="#b3f33a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Persistence subsystem -->
+  <rect class="subcard" x="480" y="449" width="400" height="205" rx="13"/>
+  <text x="504" y="478" class="lime" font-size="11" font-weight="750" letter-spacing="1">LOCAL DATA · COMPANION STORAGE</text>
+  <path d="M510 510h48v16h-48zm0 22h48v16h-48zm0 22h48v16h-48z" class="small-stroke"/>
+  <text x="578" y="520" class="bright" font-size="13" font-weight="650">config.json</text>
+  <text x="678" y="520" class="muted" font-size="11.5">mappings · settings · history fallback</text>
+  <text x="578" y="545" class="bright" font-size="13" font-weight="650">Gxx.npy</text>
+  <text x="678" y="545" class="muted" font-size="11.5">recorded landmark samples</text>
+  <text x="578" y="570" class="bright" font-size="13" font-weight="650">model.pt</text>
+  <text x="678" y="570" class="muted" font-size="11.5">trained classifier weights</text>
+  <text x="504" y="620" class="muted" font-size="11">Per-user app data directory · available offline</text>
+
+  <!-- Training subsystem -->
+  <rect class="subcard" x="900" y="449" width="388" height="205" rx="13"/>
+  <text x="924" y="478" class="lime" font-size="11" font-weight="750" letter-spacing="1">CUSTOM TRAINING · LOCAL PYTORCH</text>
+  <rect x="924" y="501" width="99" height="59" rx="8" fill="#1b211a" stroke="#4c5d3c"/>
+  <text x="973" y="525" text-anchor="middle" class="bright" font-size="11.5" font-weight="650">≥30 samples</text>
+  <text x="973" y="544" text-anchor="middle" class="muted" font-size="10.5">per gesture</text>
+  <path d="M1026 531h38" fill="none" stroke="#b3f33a" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="1071" y="501" width="83" height="59" rx="8" fill="#1b211a" stroke="#4c5d3c"/>
+  <text x="1112" y="525" text-anchor="middle" class="bright" font-size="11.5" font-weight="650">Train</text>
+  <text x="1112" y="544" text-anchor="middle" class="muted" font-size="10.5">classifier</text>
+  <path d="M1158 531h34" fill="none" stroke="#b3f33a" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="1198" y="501" width="66" height="59" rx="8" fill="#1b211a" stroke="#4c5d3c"/>
+  <text x="1231" y="525" text-anchor="middle" class="bright" font-size="11.5" font-weight="650">Save</text>
+  <text x="1231" y="544" text-anchor="middle" class="muted" font-size="10.5">model.pt</text>
+  <text x="924" y="596" class="muted" font-size="11.5">Training never runs in the hosted browser workspace.</text>
+  <text x="924" y="619" class="muted" font-size="11.5">Custom gestures supplement built-in recognition.</text>
+
+  <!-- Optional MongoDB -->
+  <rect class="subcard" x="1312" y="601" width="216" height="142" rx="12"/>
+  <text x="1332" y="629" class="lime" font-size="11" font-weight="750" letter-spacing="1">OPTIONAL MONGODB</text>
+  <ellipse cx="1352" cy="664" rx="16" ry="7" class="small-stroke"/>
+  <path d="M1336 664v25c0 4 7 7 16 7s16-3 16-7v-25m-32 12c0 4 7 7 16 7s16-3 16-7" class="small-stroke"/>
+  <text x="1380" y="666" class="bright" font-size="11.5">Mappings + settings</text>
+  <text x="1380" y="686" class="muted" font-size="11.5">Training + launch logs</text>
+  <text x="1332" y="724" class="muted" font-size="10.5">When configured; local fallback remains</text>
+  <path d="M1288 607h18" fill="none" stroke="#84907d" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#arrow-muted)"/>
+
+  <!-- Internal data connections -->
+  <path d="M579 412v27" fill="none" stroke="#84907d" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#arrow-muted)"/>
+  <text x="591" y="433" class="muted" font-size="9.5">config / history</text>
+  <path d="M990 412v27" fill="none" stroke="#84907d" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#arrow-muted)"/>
+  <text x="1003" y="432" class="muted" font-size="9.5">samples</text>
+  <path d="M1196 412v27" fill="none" stroke="#84907d" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#arrow-muted)"/>
+  <text x="1208" y="432" class="muted" font-size="9.5">model weights</text>
+  <path d="M1312 664h-22v-40" fill="none" stroke="#84907d" stroke-width="1.6" stroke-dasharray="4 4"/>
+
+  <!-- Privacy / security notes -->
+  <rect x="42" y="858" width="1514" height="142" rx="16" fill="#191f18" stroke="#465639" stroke-width="1.4"/>
+  <text x="72" y="895" class="lime" font-size="12" font-weight="750" letter-spacing="1.5">SECURITY &amp; PRIVACY BOUNDARIES</text>
+  <path d="M72 913h1454" stroke="#343d30"/>
+  <circle cx="89" cy="951" r="5" fill="#b3f33a"/>
+  <text x="105" y="956" class="bright" font-size="12.5">Loopback bind only</text>
+  <text x="105" y="978" class="muted" font-size="11">No public companion endpoint</text>
+  <circle cx="448" cy="951" r="5" fill="#b3f33a"/>
+  <text x="464" y="956" class="bright" font-size="12.5">Pairing key + origin checks</text>
+  <text x="464" y="978" class="muted" font-size="11">Authenticated local API requests</text>
+  <circle cx="835" cy="951" r="5" fill="#b3f33a"/>
+  <text x="851" y="956" class="bright" font-size="12.5">Consent gates camera capture</text>
+  <text x="851" y="978" class="muted" font-size="11">OS camera indicators stay enabled</text>
+  <circle cx="1212" cy="951" r="5" fill="#b3f33a"/>
+  <text x="1228" y="956" class="bright" font-size="12.5">Hardcoded launch allowlist</text>
+  <text x="1228" y="978" class="muted" font-size="11">No shell execution · HTTPS sites</text>
+</svg>

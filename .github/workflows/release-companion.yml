@@ -32,18 +32,18 @@ jobs:
       - name: Bundle companion runtime
         working-directory: Companion
         run: >-
-          pyinstaller --noconfirm --clean --onedir --windowed --name Gustee
+          pyinstaller --noconfirm --clean --onedir --windowed --name Gestuee
           --collect-all torch --collect-all mediapipe --collect-all cv2
           --collect-all pystray --collect-all PIL --hidden-import tkinter
-          --hidden-import pystray._win32 --icon gustee-icon.ico
-          --add-data "gustee-icon.png;." --add-data "gustee-icon.ico;." app.py
+          --hidden-import pystray._win32 --icon gestuee-icon.ico
+          --add-data "gestuee-icon.png;." --add-data "gestuee-icon.ico;." app.py
 
       - name: Verify packaged Windows icon
         shell: pwsh
         working-directory: Companion
         run: |
-          if (-not (Test-Path "dist/Gustee/_internal/gustee-icon.ico")) {
-            throw "PyInstaller did not include gustee-icon.ico in the runtime bundle."
+          if (-not (Test-Path "dist/Gestuee/_internal/gestuee-icon.ico")) {
+            throw "PyInstaller did not include gestuee-icon.ico in the runtime bundle."
           }
 
       - name: Install Inno Setup
@@ -64,8 +64,8 @@ jobs:
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gustee-windows
-          path: Companion/dist/installer/Gustee-Setup.exe
+          name: gestuee-windows
+          path: Companion/dist/installer/Gestuee-Setup.exe
 
   macos-installer:
     runs-on: macos-latest
@@ -90,24 +90,24 @@ jobs:
       - name: Bundle companion runtime
         working-directory: Companion
         run: >-
-          pyinstaller --noconfirm --clean --onedir --name Gustee
+          pyinstaller --noconfirm --clean --onedir --name Gestuee
           --collect-all torch --collect-all mediapipe --collect-all cv2
           --collect-all pystray --collect-all PIL --hidden-import tkinter
-          --hidden-import pystray._darwin --add-data "gustee-icon.png:." app.py
+          --hidden-import pystray._darwin --add-data "gestuee-icon.png:." app.py
 
       - name: Package macOS bundle
         working-directory: Companion
         run: |
           mkdir -p dist
-          ditto -c -k --sequesterRsrc --keepParent "dist/Gustee" "dist/Gustee-macOS.zip" || true
+          ditto -c -k --sequesterRsrc --keepParent "dist/Gestuee" "dist/Gestuee-macOS.zip" || true
           cp install-macos.command dist/
-          zip -j "dist/Gustee-macOS.zip" install-macos.command
+          zip -j "dist/Gestuee-macOS.zip" install-macos.command
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gustee-macos
-          path: Companion/dist/Gustee-macOS.zip
+          name: gestuee-macos
+          path: Companion/dist/Gestuee-macOS.zip
 
   linux-installer:
     runs-on: ubuntu-latest
@@ -134,22 +134,22 @@ jobs:
       - name: Bundle companion runtime
         working-directory: Companion
         run: >-
-          pyinstaller --noconfirm --clean --onedir --name Gustee
+          pyinstaller --noconfirm --clean --onedir --name Gestuee
           --collect-all torch --collect-all mediapipe --collect-all cv2
           --collect-all pystray --collect-all PIL --hidden-import tkinter
-          --hidden-import pystray._gtk --add-data "gustee-icon.png:." app.py
+          --hidden-import pystray._gtk --add-data "gestuee-icon.png:." app.py
 
       - name: Package Linux bundle
         working-directory: Companion
         run: |
           mkdir -p dist
-          tar -czf "dist/Gustee-Linux-x64.tar.gz" dist/Gustee install-linux.sh gustee-icon.png
+          tar -czf "dist/Gestuee-Linux-x64.tar.gz" dist/Gestuee install-linux.sh gestuee-icon.png
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gustee-linux
-          path: Companion/dist/Gustee-Linux-x64.tar.gz
+          name: gestuee-linux
+          path: Companion/dist/Gestuee-Linux-x64.tar.gz
 
   publish-release:
     needs: [windows-installer, macos-installer, linux-installer]
@@ -164,8 +164,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            release-artifacts/gustee-windows/Gustee-Setup.exe
-            release-artifacts/gustee-macos/Gustee-macOS.zip
-            release-artifacts/gustee-linux/Gustee-Linux-x64.tar.gz
+            release-artifacts/gestuee-windows/Gestuee-Setup.exe
+            release-artifacts/gestuee-macos/Gestuee-macOS.zip
+            release-artifacts/gestuee-linux/Gestuee-Linux-x64.tar.gz
           generate_release_notes: true
           make_latest: true

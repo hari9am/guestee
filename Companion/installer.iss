@@ -4,32 +4,32 @@
 
 [Setup]
 AppId={{A9357282-A454-4F0D-971F-50163F559FC9}
-AppName=Gustee Companion
+AppName=Gestuee Companion
 AppVersion={#AppVersion}
-AppPublisher=Gustee
-SetupIconFile=gustee-icon.ico
-DefaultDirName={localappdata}\Programs\Gustee
-DefaultGroupName=Gustee Companion
+AppPublisher=Gestuee
+SetupIconFile=gestuee-icon.ico
+DefaultDirName={localappdata}\Programs\Gestuee
+DefaultGroupName=Gestuee Companion
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 OutputDir=dist\installer
-OutputBaseFilename=Gustee-Setup
+OutputBaseFilename=Gestuee-Setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-UninstallDisplayIcon={app}\Gustee.exe
+UninstallDisplayIcon={app}\Gestuee.exe
 
 [Tasks]
-Name: "startupicon"; Description: "Start Gustee when I sign in"; GroupDescription: "Startup:"
+Name: "startupicon"; Description: "Start Gestuee when I sign in"; GroupDescription: "Startup:"
 
 [Files]
-Source: "dist\Gustee\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\Gestuee\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{autoprograms}\Gustee Companion"; Filename: "{app}\Gustee.exe"
-Name: "{userstartup}\Gustee Companion"; Filename: "{app}\Gustee.exe"; Tasks: startupicon
+Name: "{autoprograms}\Gestuee Companion"; Filename: "{app}\Gestuee.exe"
+Name: "{userstartup}\Gestuee Companion"; Filename: "{app}\Gestuee.exe"; Tasks: startupicon
 
 [Run]
-Filename: "{app}\Gustee.exe"; Description: "Launch Gustee Companion"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Gestuee.exe"; Description: "Launch Gestuee Companion"; Flags: nowait postinstall skipifsilent

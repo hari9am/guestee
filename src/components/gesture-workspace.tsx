@@ -562,7 +562,7 @@ export function GestureWorkspace({ view }: { view: View }) {
           <div className="section-eyebrow mb-3">
             {view === "overview"
               ? "YOUR PERSONAL LAUNCH SPACE"
-              : "GUSTEE WORKSPACE"}
+              : "GESTUEE WORKSPACE"}
           </div>
           <h1 className="page-title">{title}</h1>
           <p className="page-subtitle">{subtitle}</p>
@@ -876,7 +876,7 @@ export function GestureWorkspace({ view }: { view: View }) {
             <br />
             {connected
               ? "Record at least 30 samples for every gesture. Vary your hand position and angle. Add a neutral pose mapped as disabled to reduce false launches."
-              : "Connect your Gustee companion to capture samples and train your custom PyTorch model."}
+              : "Connect your Gestuee companion to capture samples and train your custom PyTorch model."}
           </div>
 
           {/* ── Cursor gesture reference card ─────────────────────────────── */}
@@ -1016,7 +1016,7 @@ export function GestureWorkspace({ view }: { view: View }) {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = "gustee-launches.csv";
+                a.download = "gestuee-launches.csv";
                 a.click();
                 URL.revokeObjectURL(url);
               }}
@@ -1143,19 +1143,19 @@ export function GestureWorkspace({ view }: { view: View }) {
           </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
             <Button asChild variant="outline" className="w-full">
-              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gestuee-Setup.exe" target="_blank" rel="noreferrer">
                 <ArrowDownToLine />
                 Windows setup
               </a>
             </Button>
             <Button asChild variant="outline" className="w-full">
-              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-macOS.zip" target="_blank" rel="noreferrer">
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gestuee-macOS.zip" target="_blank" rel="noreferrer">
                 <ArrowDownToLine />
                 macOS app
               </a>
             </Button>
             <Button asChild variant="outline" className="w-full">
-              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Linux-x64.tar.gz" target="_blank" rel="noreferrer">
+              <a href="https://github.com/hari9am/guestee/releases/latest/download/Gestuee-Linux-x64.tar.gz" target="_blank" rel="noreferrer">
                 <ArrowDownToLine />
                 Linux package
               </a>

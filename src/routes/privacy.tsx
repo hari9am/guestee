@@ -3,11 +3,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — Gustee" },
+      { title: "Privacy Policy — Gestuee" },
       {
         name: "description",
         content:
-          "Learn how Gustee handles camera access, gesture data, and device information.",
+          "Learn how Gestuee handles camera access, gesture data, and device information.",
       },
     ],
   }),
@@ -22,10 +22,10 @@ function PrivacyPolicy() {
           to="/"
           className="text-sm text-primary underline-offset-4 hover:underline"
         >
-          Back to Gustee
+          Back to Gestuee
         </Link>
         <h1 className="mt-8 text-4xl font-bold tracking-tight">
-          Gustee Privacy Policy
+          Gestuee Privacy Policy
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">
           Last updated: October 23, 2026
@@ -35,7 +35,7 @@ function PrivacyPolicy() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">Overview</h2>
             <p className="mt-2">
-              Gustee is a hand-gesture desktop companion and optional web
+              Gestuee is a hand-gesture desktop companion and optional web
               workspace. The companion processes camera input and gesture
               training on your computer. You can use its built-in gestures
               without connecting to the website. This policy explains what
@@ -54,13 +54,13 @@ function PrivacyPolicy() {
               companion restarts. While recognition, preview, or recording is
               active, the companion processes camera frames locally to detect
               hand gestures. Frames are held in memory for processing and are
-              not uploaded to Gustee servers.
+              not uploaded to Gestuee servers.
             </p>
             <p className="mt-2">
               If you connect the website to the companion and request a live
               preview, the companion serves the current preview frame to your
               browser over your computer&apos;s loopback connection (127.0.0.1).
-              This preview is not sent to Gustee&apos;s hosted website. You can
+              This preview is not sent to Gestuee&apos;s hosted website. You can
               stop recognition or preview, pause the camera, or revoke consent
               using the companion controls.
             </p>
@@ -71,7 +71,7 @@ function PrivacyPolicy() {
               launch history are also stored on your computer. On Windows, the
               companion data folder is{" "}
               <code className="rounded bg-muted px-1.5 py-0.5 text-foreground">
-                %LOCALAPPDATA%\Gustee
+                %LOCALAPPDATA%\Gestuee
               </code>
               . You can remove custom samples and mappings in the companion
               workspace or uninstall the app; uninstalling may not remove data
@@ -125,7 +125,7 @@ function PrivacyPolicy() {
               The companion can launch approved applications and HTTPS websites
               according to your gesture mappings. Those applications and
               websites are separate services and may handle information under
-              their own privacy policies. Gustee does not control their
+              their own privacy policies. Gestuee does not control their
               practices.
             </p>
           </section>
@@ -135,7 +135,7 @@ function PrivacyPolicy() {
               Changes and contact
             </h2>
             <p className="mt-2">
-              This policy may be updated when Gustee&apos;s features or data
+              This policy may be updated when Gestuee&apos;s features or data
               practices change. The current version will be published at this
               page, with its latest update date shown above. For questions or
               support, contact the project through{" "}
@@ -145,7 +145,7 @@ function PrivacyPolicy() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Gustee&apos;s GitHub issues page
+                Gestuee&apos;s GitHub issues page
               </a>
               .
             </p>

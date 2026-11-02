@@ -83,12 +83,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "Gustee" },
+        { title: "Gestuee" },
         {
           name: "description",
           content: "Your custom hand gesture app launcher.",
         },
-        { property: "og:title", content: "Gustee" },
+        { property: "og:title", content: "Gestuee" },
         {
           property: "og:description",
           content: "A more natural way to launch your apps.",

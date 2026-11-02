@@ -1,8 +1,8 @@
-# Gustee
+# Gestuee
 - [x] Build gesture launcher interface, mappings, training, history, and settings.
 - [x] Add companion for landmark capture, custom PyTorch training, and approved desktop launches.
 - [x] Verify navigation, draft editing, disconnected states, mobile layout, download, and pure launch-protection logic.
-- [x] Rename to Gustee across UI, companion, and documentation.
+- [x] Rename to Gestuee across UI, companion, and documentation.
 - [x] Fix download URL and cross-platform setup copy.
 - [x] Add auto-refreshing live camera feed while session is active.
 - [x] Fix background operation: allow_camera, pause_session, and tray start/stop wired correctly.

@@ -48,7 +48,7 @@ export function GestureShell({ view, children }: { view: View; children: React.R
       <aside className={`sidebar ${menu ? "open" : ""}`}>
         <Link to="/" className="brand" onClick={() => setMenu(false)}>
           <span className="brand-mark"><Fingerprint size={33} strokeWidth={1.8} /></span>
-          Gustee<span className="text-primary text-xs">®</span>
+          Gestuee<span className="text-primary text-xs">®</span>
         </Link>
         <div className="nav-label">WORKSPACE</div>
         <nav aria-label="Main navigation">
@@ -63,7 +63,7 @@ export function GestureShell({ view, children }: { view: View; children: React.R
           <div className="device-state">
             <div className="flex items-center gap-2 font-medium">
               <Monitor size={14} />
-              Gustee companion
+              Gestuee companion
               {reconnecting
                 ? <Loader2 size={12} className="ml-auto animate-spin text-muted-foreground" />
                 : <span className={`dot ${statusDot} ml-auto`} />}
@@ -80,7 +80,7 @@ export function GestureShell({ view, children }: { view: View; children: React.R
           <div className="flex items-center gap-2 mt-5 text-[10px] text-muted-foreground">
             <ShieldCheck size={13} />Your gestures stay on your device.
           </div>
-          <div className="mt-4 text-[9px] font-mono text-muted-foreground">GUSTEE / V1.0</div>
+          <div className="mt-4 text-[9px] font-mono text-muted-foreground">GESTUEE / V1.0</div>
         </div>
       </aside>
 
@@ -131,28 +131,28 @@ export function GestureShell({ view, children }: { view: View; children: React.R
             </div>
             <p className="page-subtitle mt-3">
               Your camera, model, and desktop apps run privately on your computer.
-              Once paired, Gustee reconnects automatically on every page refresh.
+              Once paired, Gestuee reconnects automatically on every page refresh.
             </p>
             <div className="notice">
-              <strong className="text-foreground">Install once:</strong> Gustee runs locally in the background and keeps your training data on this computer.<br />
-              <strong className="text-foreground">Windows:</strong> Install Gustee, then open it from the Start menu.<br />
+              <strong className="text-foreground">Install once:</strong> Gestuee runs locally in the background and keeps your training data on this computer.<br />
+              <strong className="text-foreground">Windows:</strong> Install Gestuee, then open it from the Start menu.<br />
               <strong className="text-foreground">macOS:</strong> Download the macOS package, then run the installer from the app bundle.<br />
               <strong className="text-foreground">Linux:</strong> Download the Linux package, extract it, and run the installer script.<br /><br />
               Use the website only to pair this device and train or manage custom gestures.
             </div>
             <div className="mt-4 grid gap-2">
               <Button asChild variant="outline" className="w-full">
-                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Setup.exe" target="_blank" rel="noreferrer">
+                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gestuee-Setup.exe" target="_blank" rel="noreferrer">
                   <ArrowDownToLine />Download Windows setup
                 </a>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-macOS.zip" target="_blank" rel="noreferrer">
+                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gestuee-macOS.zip" target="_blank" rel="noreferrer">
                   <ArrowDownToLine />Download macOS companion
                 </a>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gustee-Linux-x64.tar.gz" target="_blank" rel="noreferrer">
+                <a href="https://github.com/hari9am/guestee/releases/latest/download/Gestuee-Linux-x64.tar.gz" target="_blank" rel="noreferrer">
                   <ArrowDownToLine />Download Linux companion
                 </a>
               </Button>
@@ -166,7 +166,7 @@ export function GestureShell({ view, children }: { view: View; children: React.R
                   autoComplete="off" required />
               </label>
               {error && <p className="error-message" role="alert">{error}</p>}
-              {connected && <p className="text-success text-xs mb-4">Connected. Gustee will reconnect automatically next time.</p>}
+              {connected && <p className="text-success text-xs mb-4">Connected. Gestuee will reconnect automatically next time.</p>}
               <Button className="w-full" disabled={busy || !tokenInput.trim()} type="submit">
                 <Monitor />
                 {busy ? "Connecting…" : connected ? "Reconnect" : "Connect companion"}

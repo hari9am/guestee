@@ -15,13 +15,28 @@ import {
 } from "@/lib/gesture-types";
 
 // ── Token persistence (sessionStorage survives refresh, clears on tab close) ──
-const TOKEN_KEY = "gustee_token";
+const TOKEN_KEY = "gestuee_token";
+const LEGACY_TOKEN_KEY = "gustee_token";
 
 function loadStoredToken(): string {
-  try { return sessionStorage.getItem(TOKEN_KEY) ?? ""; } catch { return ""; }
+  try {
+    return (
+      sessionStorage.getItem(TOKEN_KEY) ??
+      sessionStorage.getItem(LEGACY_TOKEN_KEY) ??
+      ""
+    );
+  } catch {
+    return "";
+  }
 }
 function storeToken(t: string) {
-  try { if (t) sessionStorage.setItem(TOKEN_KEY, t); else sessionStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
+  try {
+    if (t) sessionStorage.setItem(TOKEN_KEY, t);
+    else sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(LEGACY_TOKEN_KEY);
+  } catch {
+    /* ignore */
+  }
 }
 
 // ── Core state hook ───────────────────────────────────────────────────────────
@@ -56,7 +71,7 @@ function useGestureState() {
         if (!response.ok) {
           throw new Error(
             response.status === 403
-              ? "This website is not allowed to connect to the companion. Update or reinstall Gustee companion."
+              ? "This website is not allowed to connect to the companion. Update or reinstall Gestuee companion."
               : "The companion returned an unexpected response.",
           );
         }

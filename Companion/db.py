@@ -1,5 +1,5 @@
 """
-MongoDB persistence layer for Gustee.
+MongoDB persistence layer for Gestuee.
 
 Collections
 -----------

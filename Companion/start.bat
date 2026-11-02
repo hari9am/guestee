@@ -1,10 +1,10 @@
 @echo off
 cd /d "%~dp0"
-title Gustee Setup
+title Gestuee Setup
 
 echo.
 echo =============================================
-echo  Gustee Companion
+echo  Gestuee Companion
 echo =============================================
 echo.
 
@@ -50,7 +50,7 @@ if errorlevel 1 ( echo ERROR: pip install failed. & pause & exit /b 1 )
 echo Python dependencies ready.
 
 echo.
-echo Stopping any previous Gustee companion on port 8765...
+echo Stopping any previous Gestuee companion on port 8765...
 cd /d "%~dp0"
 for /f "tokens=5" %%p in ('netstat -ano 2^>nul ^| findstr ":8765 "') do (
     if not "%%p"=="0" (
@@ -62,17 +62,17 @@ timeout /t 2 /nobreak >nul
 :launch
 echo.
 echo =============================================
-echo  Launching Gustee...
+echo  Launching Gestuee...
 echo =============================================
 echo.
 
-echo Starting Gustee companion. The hosted Gustee website stays online.
-echo Look for the Gustee tray icon after it starts.
+echo Starting Gestuee companion. The hosted Gestuee website stays online.
+echo Look for the Gestuee tray icon after it starts.
 cd /d "%~dp0"
 
 :: Use python.exe (not pythonw.exe) in a minimized window so errors are visible
 :: The tray icon will appear after the companion loads (about 5-10 seconds)
-start "Gustee Companion" /MIN "%~dp0.venv\Scripts\python.exe" "%~dp0app.py"
+start "Gestuee Companion" /MIN "%~dp0.venv\Scripts\python.exe" "%~dp0app.py"
 
 echo Waiting for companion to start (loading PyTorch + MediaPipe)...
 timeout /t 10 /nobreak >nul
@@ -82,7 +82,7 @@ netstat -ano | findstr ":8765 " >nul 2>&1
 if errorlevel 1 (
     echo.
     echo  WARNING: Companion may not have started.
-    echo  Check the minimized "Gustee Companion" window for errors.
+    echo  Check the minimized "Gestuee Companion" window for errors.
     echo  Common fixes:
     echo    - Delete the .venv folder and run start.bat again
     echo    - Make sure no other app is using port 8765
@@ -93,20 +93,20 @@ if errorlevel 1 (
 
 echo.
 echo =============================================
-echo  Gustee Companion is running!
+echo  Gestuee Companion is running!
 echo.
 echo  Companion: look for tray icon in taskbar
 echo             (bottom-right, click ^ arrow)
 echo.
 echo  NEXT STEPS:
-echo  1. Find the Gustee tray icon (bottom-right)
+echo  1. Find the Gestuee tray icon (bottom-right)
 echo  2. Click it and choose "Show pairing key"
-echo  3. In the Gustee website click "Connect device"
+echo  3. In the Gestuee website click "Connect device"
 echo     and paste the pairing key
 echo  4. Click "Allow camera access" in tray
 echo.
 echo  TIP: If no tray icon appears after 10s,
-echo  check the minimized Gustee Companion window
+echo  check the minimized Gestuee Companion window
 echo  for error messages.
 echo =============================================
 echo.

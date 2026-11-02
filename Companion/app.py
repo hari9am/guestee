@@ -29,18 +29,24 @@ import control
 from control import CONTROL_ACTIONS
 
 # ── Data directory (local files: samples .npy, model.pt, hand_landmarker.task) ─
-DATA = (
-    Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "Gustee"
+DATA_ROOT = (
+    Path(os.environ.get("LOCALAPPDATA", str(Path.home())))
     if sys.platform == "win32"
-    else Path.home() / "Library/Application Support/Gustee"
+    else Path.home() / "Library/Application Support"
     if sys.platform == "darwin"
-    else Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local/share"))) / "Gustee"
+    else Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local/share")))
 )
+DATA = DATA_ROOT / "Gestuee"
+LEGACY_DATA = DATA_ROOT / "Gustee"
+if not DATA.exists() and LEGACY_DATA.exists():
+    LEGACY_DATA.rename(DATA)
 DATA.mkdir(parents=True, exist_ok=True)
 
 KEY = secrets.token_urlsafe(32)
 lock = threading.RLock()
-allowed_origin = os.environ.get("GUSTEE_ORIGIN", "")
+allowed_origin = os.environ.get(
+    "GESTUEE_ORIGIN", os.environ.get("GUSTEE_ORIGIN", "")
+)
 origins = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
@@ -263,7 +269,7 @@ def ensure_camera():
     """Must be called while holding `lock`."""
     global worker_running
     if not state["camera_permission"]:
-        raise HTTPException(403, "Camera access is not allowed. Choose Allow camera access in the Gustee tray menu.")
+        raise HTTPException(403, "Camera access is not allowed. Choose Allow camera access in the Gestuee tray menu.")
     if not worker_running:
         worker_running = True
         threading.Thread(target=camera_loop, daemon=True).start()
@@ -272,9 +278,9 @@ def _start_recognition():
     """Internal: start gesture session. Raises ValueError on logical errors."""
     with lock:
         if not state["camera_permission"]:
-            raise ValueError("Allow camera access from the Gustee tray menu first.")
+            raise ValueError("Allow camera access from the Gestuee tray menu first.")
         if not state["model"]:
-            raise ValueError("No gesture recognizer is available. Reinstall Gustee to restore the built-in gesture model.")
+            raise ValueError("No gesture recognizer is available. Reinstall Gestuee to restore the built-in gesture model.")
         if state["recording"] or state["training"]:
             raise ValueError("Finish recording or training first.")
         state.update(listening=True, error=None)
@@ -284,9 +290,9 @@ def _start_recognition():
 def start():
     with lock:
         if not state["camera_permission"]:
-            raise HTTPException(403, "Allow camera access from the Gustee tray menu first.")
+            raise HTTPException(403, "Allow camera access from the Gestuee tray menu first.")
         if not state["model"]:
-            raise HTTPException(409, "No gesture recognizer is available. Reinstall Gustee to restore the built-in gesture model.")
+            raise HTTPException(409, "No gesture recognizer is available. Reinstall Gestuee to restore the built-in gesture model.")
         if state["recording"] or state["training"]:
             raise HTTPException(409, "Finish recording or training first.")
         state.update(listening=True, error=None)
@@ -305,7 +311,7 @@ def preview():
     """Start camera in preview mode without requiring a trained model."""
     with lock:
         if not state["camera_permission"]:
-            raise HTTPException(403, "Allow camera access from the Gustee tray menu first.")
+            raise HTTPException(403, "Allow camera access from the Gestuee tray menu first.")
         if state["training"]:
             raise HTTPException(409, "Finish training first.")
         state.update(previewing=True, error=None)
@@ -373,7 +379,7 @@ def save_settings(settings: Settings):
 def record(data: GestureId):
     with lock:
         if not state["camera_permission"]:
-            raise HTTPException(403, "Allow camera access from the Gustee tray menu before recording.")
+            raise HTTPException(403, "Allow camera access from the Gestuee tray menu before recording.")
         if not any(m["id"] == data.id for m in state["mappings"]):
             raise HTTPException(404, "Gesture not found")
         if state["training"] or state["recording"]:

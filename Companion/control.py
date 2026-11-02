@@ -1,5 +1,5 @@
 """
-Gustee cursor controller — v2.
+Gestuee cursor controller — v2.
 
 KEY DESIGN DECISIONS
 --------------------

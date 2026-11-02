@@ -3,13 +3,13 @@ import { GestureWorkspace } from "@/components/gesture-workspace";
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — Gustee" },
+      { title: "Settings — Gestuee" },
       {
         name: "description",
         content:
           "Adjust gesture confidence, hold time, cooldown, and camera settings.",
       },
-      { property: "og:title", content: "Settings — Gustee" },
+      { property: "og:title", content: "Settings — Gestuee" },
       {
         property: "og:description",
         content:
